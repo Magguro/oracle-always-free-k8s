@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Maximum number of attempts
-MAX_ATTEMPTS=10
+MAX_ATTEMPTS=1000
 current_attempt=0
 current_ad=0
 
@@ -24,16 +24,11 @@ while [ $current_attempt -lt $MAX_ATTEMPTS ]; do
     # Increment attempt counter
     current_attempt=$((current_attempt+1))
     
-    # Toggle availability domain between 0 and 1
-    if [ $current_ad -eq 0 ]; then
-        current_ad=1
-    else
-        current_ad=0
-    fi
-    
+    # Cycle availability domain between 0, 1, and 2
+    current_ad=$(( (current_ad + 1) % 3 ))
     echo "Terraform failed. Trying again with availability_domain = $current_ad"
     # Optional: add a delay before retrying
-    sleep 10
+    sleep 30
 done
 
 if [ $current_attempt -eq $MAX_ATTEMPTS ]; then
